@@ -7,9 +7,24 @@ For example: `{[][]}({})` is balanced, while `][`, `([)]`, `{`, `{(}{}` are not.
 Implement the following method:
 
 ```java
-public static boolean isBalanced(String str) {
-    ...
-}
+    public static boolean isBalanced(String str) {
+    	if(str == null) return true;
+    	List<Character> l = new ArrayList<Character>();
+    	while(str.length() != 0) {
+    		char c = str.charAt(0);
+    		if(c == ')') {
+    			if(l.isEmpty() || !l.remove(l.size()-1).equals('(')) return false;
+    		}else if(c == '}'){
+    			if(l.isEmpty() || !l.remove(l.size()-1).equals('{')) return false;
+    		}else if(c == ']'){
+    			if(l.isEmpty() || !l.remove(l.size()-1).equals('[')) return false;
+    		}else {
+    			l.add(str.charAt(0));
+    		}
+    		str = str.substring(1);
+    	}
+    	return l.isEmpty();
+    }
 ```
 
 `isBalanced` returns `true` if `str` is balanced according to the rules explained above. Otherwise, it returns `false`.
@@ -25,4 +40,56 @@ Write below the actions you took on each step and the results you obtained.
 Use the project in [tp3-balanced-strings](../code/tp3-balanced-strings) to complete this exercise.
 
 ## Answer
+
+1. La partition est : null, vide et cas simple qui fonctionne et d’erreur.
+
+2.  Ajouts de tests simple et plus complexe.
+Les tests de l'étape précédente sont donc : 
+
+```java
+	@Test
+	void test() {
+		//null
+		assertTrue(StringUtils.isBalanced(null));
+		//empty
+		assertTrue(StringUtils.isBalanced(""));
+		//simple ()
+		assertTrue(StringUtils.isBalanced("()"));
+		//simple {}
+		assertTrue(StringUtils.isBalanced("{}"));
+		//simple []
+		assertTrue(StringUtils.isBalanced("[]"));
+		//complex all ({[
+		assertTrue(StringUtils.isBalanced("({[]})"));
+		//error (
+		assertFalse(StringUtils.isBalanced("("));
+		//error {
+		assertFalse(StringUtils.isBalanced("{"));
+		//error [
+		assertFalse(StringUtils.isBalanced("["));
+   }
+
+```
+
+
+3.  Ajout de nombreux cas d’erreur pour passer dans tous les cas des if.
+
+```java
+	@Test
+	void test() {
+		//add test
+		//other error for if
+		//find bug
+		assertFalse(StringUtils.isBalanced("]["));
+		assertFalse(StringUtils.isBalanced("(}"));
+		assertFalse(StringUtils.isBalanced("}"));
+		assertFalse(StringUtils.isBalanced("{)"));
+		assertFalse(StringUtils.isBalanced(")"));
+		assertFalse(StringUtils.isBalanced("a(a{a[a]a}a)a"));
+   }
+
+```
+
+4.  PIT a généré 20 mutations avec un score de 100%.
+
 
