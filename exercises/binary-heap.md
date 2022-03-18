@@ -7,17 +7,32 @@ Implement a `BinaryHeap` class with the following interface:
 
 ```java
 class BinaryHeap<T> {
+	
+	private Comparator<T> comparator;
+	private List<T> list = new ArrayList<T>();
 
-    public BinaryHeap(Comparator<T> comparator) { ... }
+    public BinaryHeap(Comparator<T> comparator) {
+    	this.comparator = comparator;
+    }
 
-    public T pop() { ... }
+	public T pop() {
+    	if(list.isEmpty()) throw new NoSuchElementException();
+    	return list.remove(0);
+    }
 
-    public T peek() { ... }
+    public T peek() {
+    	if(list.isEmpty()) throw new NoSuchElementException();
+    	return list.get(0);
+    }
 
-    public void push(T element) { ... }
+    public void push(T element) {
+    	list.add(element);
+    	list.sort(comparator);
+    }
 
-    public int count() { ... }
-
+    public int count() {
+    	return list.size();
+    }
 }
 ```
 
@@ -40,3 +55,38 @@ Use the following steps to design the test suite:
 Use the project in [tp3-heap](../code/tp3-heap) to complete this exercise.
 
 ## Answer
+
+1. La partition est : Pour pop() on a si il renvoie un élément ou renvoie une exception. Pour peek() renvoie un élément sans l'enlever ou une exception. Pour push() ajouter et tri les éléments.
+
+
+2. Les tests de l'étape précedente sont les suivants: 
+
+```java
+	@Test
+	void test() {
+		BinaryHeap<Integer> heap = new BinaryHeap<Integer>((a, b) -> Integer.compare(a, b));
+		//heap vide
+		assertThrows(NoSuchElementException.class, () -> heap.peek());
+		//test peek
+		heap.push(99);
+		assertTrue(heap.peek()==99);
+		
+		//test count
+		assertTrue(heap.count() == 1);
+		
+		//test pop
+		heap.push(1);
+		assertTrue(heap.pop()==1 && heap.pop()==99);
+		assertThrows(NoSuchElementException.class, () -> heap.pop());
+		
+		//test count
+		assertTrue(heap.count() == 0);
+	}
+```
+Pour cette étape, on a ajouté l'appel de la méthode count().
+
+3. Pas de condition à 2 conditions
+
+4. PIT a généré 6 mutations pour un score de 100%.
+
+
