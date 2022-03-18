@@ -7,32 +7,17 @@ Implement a `BinaryHeap` class with the following interface:
 
 ```java
 class BinaryHeap<T> {
-	
-	private Comparator<T> comparator;
-	private List<T> list = new ArrayList<T>();
 
-    public BinaryHeap(Comparator<T> comparator) {
-    	this.comparator = comparator;
-    }
+    public BinaryHeap(Comparator<T> comparator) { ... }
 
-	public T pop() {
-    	if(list.isEmpty()) throw new NoSuchElementException();
-    	return list.remove(0);
-    }
+    public T pop() { ... }
 
-    public T peek() {
-    	if(list.isEmpty()) throw new NoSuchElementException();
-    	return list.get(0);
-    }
+    public T peek() { ... }
 
-    public void push(T element) {
-    	list.add(element);
-    	list.sort(comparator);
-    }
+    public void push(T element) { ... }
 
-    public int count() {
-    	return list.size();
-    }
+    public int count() { ... }
+
 }
 ```
 
