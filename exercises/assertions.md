@@ -17,7 +17,7 @@ On peut utiliser BigDecimal avec :
 ```java
 assertTrue(BigDecimal.valueOf(3).multiply(BigDecimal.valueOf(.4)).equals(BigDecimal.valueOf(1.2)));
 ```
-2.	assertEquals utilise la méthode equals pour vérifier si les 2 objets sont égaux alors que assertSame utilise l’opér	ateur == pour vérifier si les objets sont égaux.
+2.	assertEquals utilise la méthode equals pour vérifier si les 2 objets sont égaux alors que assertSame utilise l’opérateur == pour vérifier si les objets sont égaux.
 
 Voici un scénario pour lequel assertEquals et assertSame renvoit le même résultat : 
 ```java
