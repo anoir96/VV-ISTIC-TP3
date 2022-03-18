@@ -4,18 +4,88 @@ Implement a class `Date` with the interface shown below:
 
 ```java
 class Date implements Comparable<Date> {
+	
+	private int day;
+	private int month;
+	private int year;
 
-    public Date(int day, int month, int year) { ... }
+    public Date(int day, int month, int year) {
+    	this.day = day;
+    	this.month = month;
+    	this.year = year;
+    }
 
-    public static boolean isValidDate(int day, int month, int year) { ... }
+    public int getDay() {
+		return day;
+	}
 
-    public static boolean isLeapYear(int year) { ... }
+	public int getMonth() {
+		return month;
+	}
 
-    public Date nextDate() { ... }
+	public int getYear() {
+		return year;
+	}
 
-    public Date previousDate { ... }
+	public static boolean isValidDate(int day, int month, int year) {
+    	return 0<day && day<=31 && 0<month && month<=12 && year>=0;
+    }
 
-    public int compareTo(Date other) { ... }
+    public static boolean isLeapYear(int year) {
+    	if (year % 4 == 0) {
+            if (year % 100 == 0) {
+                if (year % 400 == 0) {
+                    return true;
+                }else {
+                	return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public Date nextDate() {
+    	int newDay = day;
+    	int newMonth = month;
+    	int newYear = year;
+    	newDay++;
+    	if(newDay>31) {
+    		newDay = 1;
+    		newMonth++;
+    		if(newMonth>12) {
+    			newMonth = 1;
+    			newYear++;
+    		}
+    	}
+    	return new Date(newDay, newMonth, newYear);
+    }
+
+    public Date previousDate() {
+    	int newDay = day;
+    	int newMonth = month;
+    	int newYear = year;
+    	newDay--;
+    	if(newDay<1) {
+    		newDay = 31;
+    		newMonth--;
+    		if(newMonth<1) {
+    			newMonth = 12;
+    			newYear--;
+    		}
+    	}
+    	return new Date(newDay, newMonth, newYear);
+    }
+
+    public int compareTo(Date other) {
+    	if(other.getYear() == year) {
+    		if(other.getMonth() == month) {
+    			return day - other.getDay();
+    		}
+    		return month - other.getMonth();
+    	}
+    	return year - other.getYear();
+    }
 
 }
 ```
@@ -53,3 +123,64 @@ Use the project in [tp3-date](../code/tp3-date) to complete this exercise.
 
 ## Answer
 
+1.  La partition est : Pour isValidDate() on a les dates valides ou non. Pour isLeapYear() on vérifie si c’est bissextile ou non. Pour nextDate() et previousDate() on fait un cas simple et un qui change de mois. Et pour compareTo() on fais les 3 cas possible plus on vérifie si il renvoie une null exception.
+
+2.  Ajout de test pour les leaps year pour passer dans tous les cas:
+
+```java
+class DateTest {
+
+	@Test
+	void test() {
+		//is not valid with 13 month, 31 or 32 day ...
+		assertFalse(Date.isValidDate(13, 13, 1996));
+		assertTrue(Date.isValidDate(31, 1, 2022));
+		assertFalse(Date.isValidDate(32, 1, 2000));
+		assertFalse(Date.isValidDate(0, 0, 0));
+		
+		//leap or not leap
+		assertTrue(Date.isLeapYear(2004));
+		assertFalse(Date.isLeapYear(2003));
+		assertTrue(Date.isLeapYear(2000));
+		assertFalse(Date.isLeapYear(1900));
+       }
+}
+```
+
+3.  Ajout de test pour nextDate() et previousDate() avec les années qui changent:
+
+```java
+class DateTest {
+
+	@Test
+	void test() {
+		//next date simple and with new month
+		assertTrue(new Date(12,12,1578).nextDate().getDay()==13);
+		assertTrue(new Date(31,5,1578).nextDate().getDay()==1);
+		assertTrue(new Date(31,12,1578).nextDate().getYear()==1579);
+		
+		//previous date simple and with new month
+		assertTrue(new Date(1,12,1578).previousDate().getDay()==31);
+		assertTrue(new Date(31,5,1578).previousDate().getDay()==30);
+		assertTrue(new Date(1,1,1578).previousDate().getYear()==1577);
+        }
+}
+```
+4.  PIT a généré 49 mutations pour un score de 76%. Après l’ajout d’un test pour compareTo en fonction du mois on passe à 80%.
+
+Les tests compareTo sont les suivants:
+
+```java
+class DateTest {
+
+	@Test
+	void test() {
+		//compare equal posterior and anterior and null
+		assertThrows(NullPointerException.class, () -> new Date(12,12,1578).compareTo(null));
+		assertTrue(new Date(12,12,1578).compareTo(new Date(12,12,1578))==0);
+		assertTrue(new Date(12,12,1578).compareTo(new Date(20,12,1578))<0);
+		assertTrue(new Date(20,12,1578).compareTo(new Date(12,12,1578))>0);
+		assertTrue(new Date(20,11,1578).compareTo(new Date(12,12,1578))<0);
+	}
+}
+```
