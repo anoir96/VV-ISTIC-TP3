@@ -44,31 +44,7 @@ Use the project in [tp3-heap](../code/tp3-heap) to complete this exercise.
 1. La partition est : Pour pop() on a si il renvoie un élément ou renvoie une exception. Pour peek() renvoie un élément sans l'enlever ou une exception. Pour push() ajouter et tri les éléments.
 
 
-2. Les tests de l'étape précedente sont les suivants: 
-
-```java
-	@Test
-	void test() {
-		BinaryHeap<Integer> heap = new BinaryHeap<Integer>((a, b) -> Integer.compare(a, b));
-		//heap vide
-		assertThrows(NoSuchElementException.class, () -> heap.peek());
-		//test peek
-		heap.push(99);
-		assertTrue(heap.peek()==99);
-		
-		//test count
-		assertTrue(heap.count() == 1);
-		
-		//test pop
-		heap.push(1);
-		assertTrue(heap.pop()==1 && heap.pop()==99);
-		assertThrows(NoSuchElementException.class, () -> heap.pop());
-		
-		//test count
-		assertTrue(heap.count() == 0);
-	}
-```
-Pour cette étape, on a ajouté l'appel de la méthode count().
+2. Pour cette étape, on a ajouté l'appel de la méthode count().
 
 3. Pas de condition à 2 conditions
 
